@@ -15,6 +15,7 @@ import { LeadershipCards } from "@/components/cards/LeadershipCards";
 import { TestimonialsCarousel } from "@/components/sections/TestimonialsCarousel";
 import { LocationMap } from "@/components/sections/LocationMap";
 import { Footer } from "@/components/layout/Footer";
+import { FloatingContactWidget } from "@/components/layout/FloatingContactWidget";
 import { BookingModal } from "@/components/booking/BookingModal";
 import { Project, projectsData } from "@/data/projects";
 
@@ -123,6 +124,9 @@ export default function Home() {
         onSelectMatchedProject={(p) => setDetailModalProject(p)}
         onBookVisit={(name, type) => handleOpenBooking(name, type)}
       />
+
+      {/* Floating Direct WhatsApp & Priority Sales Desk Widget */}
+      <FloatingContactWidget onOpenBooking={() => handleOpenBooking()} />
     </main>
   );
 }
