@@ -3,7 +3,6 @@
 import React, { useState, useMemo } from "react";
 import { projectsData, Project } from "@/data/projects";
 import { Search, MapPin, Calendar, ArrowRight, Eye, Sparkles, Building2 } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
 
 interface PortfolioSectionProps {
   onSelectProject: (project: Project) => void;
@@ -225,17 +224,11 @@ export const PortfolioSection: React.FC<PortfolioSectionProps> = ({
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <AnimatePresence>
-              {filteredProjects.map((project) => (
-                <motion.div
-                  key={project.id}
-                  layout
-                  initial={{ opacity: 0, scale: 0.95 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.95 }}
-                  transition={{ duration: 0.3 }}
-                  className="bg-[#0a0e18] border border-white/15 rounded-sm overflow-hidden flex flex-col group hover:border-[#f59e0b] hover:shadow-[0_12px_40px_rgba(245,158,11,0.15)] transition-all duration-300 shadow-2xl"
-                >
+            {filteredProjects.map((project) => (
+              <div
+                key={project.id}
+                className="bg-[#0a0e18] border border-white/15 rounded-sm overflow-hidden flex flex-col group hover:border-[#f59e0b] hover:shadow-[0_12px_40px_rgba(245,158,11,0.15)] transition-all duration-300 shadow-2xl"
+              >
                   {/* Card Cover Image */}
                   <div className="aspect-[16/10] relative overflow-hidden bg-slate-950">
                     <img
@@ -346,9 +339,8 @@ export const PortfolioSection: React.FC<PortfolioSectionProps> = ({
                       </div>
                     </div>
                   </div>
-                </motion.div>
+                </div>
               ))}
-            </AnimatePresence>
           </div>
         )}
       </div>

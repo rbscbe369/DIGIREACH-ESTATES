@@ -4,7 +4,6 @@ import React from "react";
 import { siteConfig } from "@/config/siteConfig";
 import { StatsBar } from "./StatsBar";
 import { Calendar, ArrowRight, ShieldCheck, CheckCircle2, Sparkles } from "lucide-react";
-import { motion } from "framer-motion";
 
 interface HeroProps {
   onOpenBooking: () => void;
@@ -21,12 +20,7 @@ export const Hero: React.FC<HeroProps> = ({ onOpenBooking, onOpenQuiz }) => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
           {/* Left Column: Headline & Action */}
-          <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.6 }}
-            className="lg:col-span-7 space-y-6"
-          >
+          <div className="lg:col-span-7 space-y-6">
             {/* RERA Badge & Eyebrow */}
             <div className="flex flex-wrap items-center gap-3">
               <span className="eyebrow !mb-0">
@@ -91,15 +85,10 @@ export const Hero: React.FC<HeroProps> = ({ onOpenBooking, onOpenQuiz }) => {
                 <span>Zero Hidden Escalations</span>
               </div>
             </div>
-          </motion.div>
+          </div>
 
           {/* Right Column: Bright, Sun-Drenched Architectural Highlight on Deep Dark Frame */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="lg:col-span-5 relative"
-          >
+          <div className="lg:col-span-5 relative">
             <div className="relative rounded-sm overflow-hidden border border-white/20 bg-[#0c1017] shadow-[0_20px_60px_rgba(0,0,0,0.8)] group">
               {/* Bright, Vivid Architectural Photo */}
               <div className="aspect-[4/3] overflow-hidden relative bg-slate-950">
@@ -152,7 +141,7 @@ export const Hero: React.FC<HeroProps> = ({ onOpenBooking, onOpenQuiz }) => {
                 </div>
               </div>
             </div>
-          </motion.div>
+          </div>
         </div>
 
         {/* High-Contrast Scoreboard */}

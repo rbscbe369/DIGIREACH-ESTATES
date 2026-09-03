@@ -2,7 +2,6 @@
 
 import React from "react";
 import { Check, ArrowRight } from "lucide-react";
-import { motion } from "framer-motion";
 
 interface ProjectTypeCardData {
   title: string;
@@ -102,13 +101,9 @@ export const ProjectTypeCards: React.FC<ProjectTypeCardsProps> = ({ onSelectType
 
         {/* 4 Cards Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {tiers.map((tier, idx) => (
-            <motion.div
+          {tiers.map((tier) => (
+            <div
               key={tier.title}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.4, delay: idx * 0.1 }}
               className={`bg-[#0a0e18] border rounded-sm p-7 flex flex-col justify-between transition-all duration-300 relative group hover:border-[#f59e0b] hover:-translate-y-1 shadow-2xl ${
                 tier.featured
                   ? "border-[#f59e0b] ring-1 ring-[#f59e0b]/40 shadow-[0_15px_40px_rgba(245,158,11,0.2)]"
@@ -173,7 +168,7 @@ export const ProjectTypeCards: React.FC<ProjectTypeCardsProps> = ({ onSelectType
                 <span>{tier.ctaText}</span>
                 <ArrowRight className="w-3.5 h-3.5" />
               </button>
-            </motion.div>
+            </div>
           ))}
         </div>
       </div>

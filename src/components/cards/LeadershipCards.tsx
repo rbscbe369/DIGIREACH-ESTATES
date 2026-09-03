@@ -3,7 +3,6 @@
 import React from "react";
 import { leadershipData } from "@/data/leadership";
 import { Award, Briefcase } from "lucide-react";
-import { motion } from "framer-motion";
 
 export const LeadershipCards: React.FC = () => {
   return (
@@ -22,13 +21,9 @@ export const LeadershipCards: React.FC = () => {
 
         {/* Staff / Leadership 4-column Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {leadershipData.map((leader, idx) => (
-            <motion.div
+          {leadershipData.map((leader) => (
+            <div
               key={leader.id}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.4, delay: idx * 0.1 }}
               className="bg-[#0a0e18] border border-white/15 rounded-sm overflow-hidden flex flex-col group hover:border-[#f59e0b] hover:shadow-[0_12px_40px_rgba(245,158,11,0.15)] transition-all duration-300 shadow-2xl"
             >
               {/* Photo Frame: Bright, Crisp & Crystal Clear with zero dark veil */}
@@ -65,7 +60,7 @@ export const LeadershipCards: React.FC = () => {
                   {leader.bio}
                 </p>
               </div>
-            </motion.div>
+            </div>
           ))}
         </div>
       </div>

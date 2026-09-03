@@ -2,7 +2,6 @@
 
 import React from "react";
 import { ShieldCheck, Clock, Award, Leaf, Building, Banknote, Check } from "lucide-react";
-import { motion } from "framer-motion";
 
 const reasons = [
   {
@@ -57,31 +56,27 @@ export const WhyChooseUs: React.FC = () => {
           {reasons.map((item, idx) => {
             const Icon = item.icon;
             return (
-              <motion.div
+              <div
                 key={idx}
-                initial={{ opacity: 0, y: 15 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.4, delay: idx * 0.08 }}
-                className="bg-[#0a0d14] border border-white/10 p-7 rounded-sm flex flex-col justify-between group hover:border-[#e07a2c] transition-all"
+                className="bg-[#0a0e18] border border-white/15 p-7 rounded-sm flex flex-col justify-between group hover:border-[#f59e0b] hover:shadow-[0_12px_40px_rgba(245,158,11,0.15)] transition-all shadow-2xl"
               >
                 <div>
-                  <div className="w-12 h-12 rounded-sm bg-gradient-to-br from-[#e07a2c]/20 to-transparent border border-[#e07a2c]/30 text-[#e07a2c] flex items-center justify-center mb-5 group-hover:scale-105 transition-transform">
+                  <div className="w-12 h-12 rounded-sm bg-gradient-to-br from-[#e07a2c]/20 to-transparent border border-[#f59e0b]/40 text-[#f59e0b] flex items-center justify-center mb-5 group-hover:scale-105 transition-transform">
                     <Icon className="w-6 h-6" />
                   </div>
                   <h3 className="font-display text-xl text-white uppercase tracking-wide">
                     {item.title}
                   </h3>
-                  <p className="text-slate-400 text-xs sm:text-sm font-sans mt-2.5 leading-relaxed">
+                  <p className="text-slate-300 text-xs sm:text-sm font-sans mt-2.5 leading-relaxed">
                     {item.desc}
                   </p>
                 </div>
 
-                <div className="pt-4 mt-4 border-t border-white/5 flex items-center gap-2 text-[11px] font-mono text-emerald-400">
+                <div className="pt-4 mt-4 border-t border-white/10 flex items-center gap-2 text-[11px] font-mono text-emerald-400 font-semibold">
                   <Check className="w-3.5 h-3.5" />
                   <span>RERA & ISO 9001:2015 Verified</span>
                 </div>
-              </motion.div>
+              </div>
             );
           })}
         </div>
