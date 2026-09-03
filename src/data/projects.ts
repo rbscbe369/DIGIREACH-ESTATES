@@ -149,8 +149,9 @@ export const projectsData: Project[] = [
     amenitiesCount: 65,
     constructionProgressPct: 100,
     reraNumber: "TN/01/BLDR/2023/0741",
-    coverImage: "https://images.unsplash.com/photo-1613977257363-707ba9348227?auto=format&fit=crop&w=1200&q=85",
+    coverImage: "/images/aurum_enclave_villa.jpg",
     galleryImages: [
+      "/images/aurum_enclave_villa.jpg",
       "https://images.unsplash.com/photo-1613977257363-707ba9348227?auto=format&fit=crop&w=1200&q=85",
       "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=85"
     ],
