@@ -1,0 +1,117 @@
+{
+  "name": "Digireach Estates - Scheduled 24h Reminder & 48h Post-Visit Follow-Up",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "hours",
+              "hoursInterval": 1
+            }
+          ]
+        }
+      },
+      "name": "Hourly Schedule Trigger",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1,
+      "position": [220, 320]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "-- Fetch visits occurring tomorrow (24h window) that have not been reminded yet\nSELECT id, name, phone, project_name, unit_preference, date, time\nFROM public.site_visits\nWHERE date = CURRENT_DATE + INTERVAL '1 day'\n  AND status = 'pending'\nLIMIT 50;"
+      },
+      "name": "Query Visits Due Tomorrow (24h)",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 1,
+      "position": [440, 220]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "-- Fetch completed visits from 2 days ago for follow-up review\nSELECT id, name, phone, project_name, unit_preference, date, time\nFROM public.site_visits\nWHERE date = CURRENT_DATE - INTERVAL '2 days'\n  AND status = 'completed'\nLIMIT 50;"
+      },
+      "name": "Query Completed Visits (48h Ago)",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 1,
+      "position": [440, 420]
+    },
+    {
+      "parameters": {
+        "requestMethod": "POST",
+        "url": "https://api.wacrm.net/v1/messages/template",
+        "options": {},
+        "headerParametersUi": {
+          "parameter": [
+            { "name": "Authorization", "value": "Bearer ={{$env.WACRM_API_KEY}}" },
+            { "name": "Content-Type", "value": "application/json" }
+          ]
+        },
+        "bodyParametersUi": {
+          "parameter": [
+            { "name": "to", "value": "=91{{$json.phone.replace(/\\D/g, '')}}" },
+            { "name": "template", "value": "digireach_visit_reminder_24h" },
+            { "name": "language", "value": "en" },
+            {
+              "name": "components",
+              "value": "={{JSON.stringify([\n  {\n    type: 'body',\n    parameters: [\n      { type: 'text', text: $json.name },\n      { type: 'text', text: $json.project_name },\n      { type: 'text', text: $json.time },\n      { type: 'text', text: '+919876543210' }\n    ]\n  }\n])}}"
+            }
+          ]
+        }
+      },
+      "name": "Send 24h Reminder WhatsApp",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
+      "position": [680, 220]
+    },
+    {
+      "parameters": {
+        "requestMethod": "POST",
+        "url": "https://api.wacrm.net/v1/messages/template",
+        "options": {},
+        "headerParametersUi": {
+          "parameter": [
+            { "name": "Authorization", "value": "Bearer ={{$env.WACRM_API_KEY}}" },
+            { "name": "Content-Type", "value": "application/json" }
+          ]
+        },
+        "bodyParametersUi": {
+          "parameter": [
+            { "name": "to", "value": "=91{{$json.phone.replace(/\\D/g, '')}}" },
+            { "name": "template", "value": "digireach_post_visit_followup_48h" },
+            { "name": "language", "value": "en" },
+            {
+              "name": "components",
+              "value": "={{JSON.stringify([\n  {\n    type: 'body',\n    parameters: [\n      { type: 'text', text: $json.name },\n      { type: 'text', text: $json.project_name },\n      { type: 'text', text: 'https://digireachestates.com/feedback/' + $json.id }\n    ]\n  }\n])}}"
+            }
+          ]
+        }
+      },
+      "name": "Send 48h Post-Visit Follow-Up",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
+      "position": [680, 420]
+    }
+  ],
+  "connections": {
+    "Hourly Schedule Trigger": {
+      "main": [
+        [
+          { "node": "Query Visits Due Tomorrow (24h)", "type": "main", "index": 0 },
+          { "node": "Query Completed Visits (48h Ago)", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "Query Visits Due Tomorrow (24h)": {
+      "main": [
+        [{ "node": "Send 24h Reminder WhatsApp", "type": "main", "index": 0 }]
+      ]
+    },
+    "Query Completed Visits (48h Ago)": {
+      "main": [
+        [{ "node": "Send 48h Post-Visit Follow-Up", "type": "main", "index": 0 }]
+      ]
+    }
+  }
+}

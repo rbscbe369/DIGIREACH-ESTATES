@@ -1,0 +1,113 @@
+{
+  "name": "Digireach Estates - Real-Time WhatsApp Confirmation (via wacrm)",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "digireach-site-visit-webhook",
+        "options": {}
+      },
+      "name": "Webhook Trigger (Supabase / App)",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [240, 300]
+    },
+    {
+      "parameters": {
+        "functionCode": "// Extract lead data from Supabase Edge Function payload contract\nconst body = items[0].json.body || items[0].json;\nconst lead = body.lead || body.data || body;\n\n// Format international phone number (E.164 without plus for wacrm/Meta API)\nlet phone = String(lead.phone || '').replace(/\\D/g, '');\nif (phone.length === 10) {\n  phone = '91' + phone;\n}\n\n// Pre-formatted message body parameters for wacrm template\nreturn [{\n  json: {\n    to_phone: phone,\n    template_name: 'digireach_site_visit_confirmed',\n    language_code: 'en',\n    customer_name: lead.name,\n    project_name: lead.project || 'Digireach Lumina Towers',\n    project_type: (lead.project_type || 'residential').toUpperCase(),\n    unit_preference: lead.unit_preference || '3 BHK Royal Residence',\n    visit_date: lead.date,\n    visit_time: lead.time,\n    visit_mode: lead.visit_mode || 'In-Person Executive Escort',\n    location_pin_url: 'https://maps.google.com/?q=11.0016,76.9744',\n    site_contact_phone: '+919876543210',\n    brochure_pdf_url: 'https://digireachestates.com/brochures/' + (lead.project || 'lumina-towers').toLowerCase().replace(/\\s+/g, '-') + '.pdf'\n  }\n}];"
+      },
+      "name": "Format wacrm Payload",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [460, 300]
+    },
+    {
+      "parameters": {
+        "requestMethod": "POST",
+        "url": "https://api.wacrm.net/v1/messages/template",
+        "options": {},
+        "headerParametersUi": {
+          "parameter": [
+            {
+              "name": "Authorization",
+              "value": "Bearer ={{$env.WACRM_API_KEY}}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "bodyParametersUi": {
+          "parameter": [
+            {
+              "name": "to",
+              "value": "={{$json.to_phone}}"
+            },
+            {
+              "name": "template",
+              "value": "={{$json.template_name}}"
+            },
+            {
+              "name": "language",
+              "value": "={{$json.language_code}}"
+            },
+            {
+              "name": "components",
+              "value": "={{JSON.stringify([\n  {\n    type: 'body',\n    parameters: [\n      { type: 'text', text: $json.customer_name },\n      { type: 'text', text: $json.project_name },\n      { type: 'text', text: $json.unit_preference },\n      { type: 'text', text: $json.visit_date },\n      { type: 'text', text: $json.visit_time },\n      { type: 'text', text: $json.site_contact_phone }\n    ]\n  },\n  {\n    type: 'button',\n    sub_type: 'url',\n    index: '0',\n    parameters: [\n      { type: 'text', text: $json.location_pin_url }\n    ]\n  }\n])}}"
+            }
+          ]
+        }
+      },
+      "name": "Dispatch WhatsApp Template via wacrm",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
+      "position": [680, 300]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "UPDATE public.site_visits SET webhook_dispatched = true, wacrm_message_id = '{{$json.message_id || 'SENT'}}' WHERE phone = '{{$node['Format wacrm Payload'].json['to_phone'].slice(-10)}}' AND status = 'pending';"
+      },
+      "name": "Update Supabase Status",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 1,
+      "position": [900, 300]
+    }
+  ],
+  "connections": {
+    "Webhook Trigger (Supabase / App)": {
+      "main": [
+        [
+          {
+            "node": "Format wacrm Payload",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Format wacrm Payload": {
+      "main": [
+        [
+          {
+            "node": "Dispatch WhatsApp Template via wacrm",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Dispatch WhatsApp Template via wacrm": {
+      "main": [
+        [
+          {
+            "node": "Update Supabase Status",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}

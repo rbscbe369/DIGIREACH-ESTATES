@@ -1,0 +1,168 @@
+{
+  "name": "Digireach Estates - Rule-Based WhatsApp Keyword Router (No AI/LLM)",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "wacrm-incoming-webhook",
+        "options": {}
+      },
+      "name": "Inbound Message Webhook (wacrm)",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [220, 360]
+    },
+    {
+      "parameters": {
+        "functionCode": "// Extract message text from wacrm inbound webhook\nconst raw = items[0].json.body || items[0].json;\nconst messageText = (raw.text || raw.message || raw.body || '').toUpperCase();\nconst fromPhone = raw.from || raw.phone || '';\n\nlet route = 'DEFAULT';\n\nif (messageText.includes('PRICE')) {\n  route = 'PRICE';\n} else if (messageText.includes('CALLBACK')) {\n  route = 'CALLBACK';\n} else if (messageText.includes('RESCHEDULE')) {\n  route = 'RESCHEDULE';\n} else if (messageText.includes('CANCEL')) {\n  route = 'CANCEL';\n}\n\nreturn [{\n  json: {\n    from_phone: fromPhone,\n    raw_text: messageText,\n    route: route,\n    timestamp: new Date().toISOString()\n  }\n}];"
+      },
+      "name": "Parse Keyword Router (Rule-Based)",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [440, 360]
+    },
+    {
+      "parameters": {
+        "dataType": "string",
+        "value1": "={{$json.route}}",
+        "rules": {
+          "rules": [
+            {
+              "value2": "PRICE",
+              "output": 0
+            },
+            {
+              "value2": "CALLBACK",
+              "output": 1
+            },
+            {
+              "value2": "RESCHEDULE",
+              "output": 2
+            },
+            {
+              "value2": "CANCEL",
+              "output": 3
+            }
+          ]
+        }
+      },
+      "name": "Keyword Switch",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 1,
+      "position": [660, 360]
+    },
+    {
+      "parameters": {
+        "requestMethod": "POST",
+        "url": "https://api.wacrm.net/v1/messages/text",
+        "options": {},
+        "headerParametersUi": {
+          "parameter": [
+            { "name": "Authorization", "value": "Bearer ={{$env.WACRM_API_KEY}}" },
+            { "name": "Content-Type", "value": "application/json" }
+          ]
+        },
+        "bodyParametersUi": {
+          "parameter": [
+            { "name": "to", "value": "={{$json.from_phone}}" },
+            { "name": "body", "value": "Here is the official verified Price & Cost Sheet for Digireach Estates:\n\n📄 Download PDF: https://digireachestates.com/downloads/digireach-master-price-sheet.pdf\n\nIncludes base selling rate, car park charges, clubhouse dues, and GST calculation. Reply CALLBACK if you want our CFO to explain payment subvention plans." }
+          ]
+        }
+      },
+      "name": "Reply Price Sheet Link",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
+      "position": [920, 160]
+    },
+    {
+      "parameters": {
+        "requestMethod": "POST",
+        "url": "https://api.wacrm.net/v1/contacts/tag",
+        "options": {},
+        "headerParametersUi": {
+          "parameter": [
+            { "name": "Authorization", "value": "Bearer ={{$env.WACRM_API_KEY}}" },
+            { "name": "Content-Type", "value": "application/json" }
+          ]
+        },
+        "bodyParametersUi": {
+          "parameter": [
+            { "name": "phone", "value": "={{$json.from_phone}}" },
+            { "name": "tags", "value": "[\"lead_hot\", \"callback_requested\"]" },
+            { "name": "notify_sales_email", "value": "sales@digireachestates.com" }
+          ]
+        }
+      },
+      "name": "Tag Lead & Alert Sales Team",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
+      "position": [920, 280]
+    },
+    {
+      "parameters": {
+        "requestMethod": "POST",
+        "url": "https://api.wacrm.net/v1/contacts/tag",
+        "options": {},
+        "headerParametersUi": {
+          "parameter": [
+            { "name": "Authorization", "value": "Bearer ={{$env.WACRM_API_KEY}}" },
+            { "name": "Content-Type", "value": "application/json" }
+          ]
+        },
+        "bodyParametersUi": {
+          "parameter": [
+            { "name": "phone", "value": "={{$json.from_phone}}" },
+            { "name": "tags", "value": "[\"reschedule_requested\", \"staff_action_required\"]" }
+          ]
+        }
+      },
+      "name": "Tag for Reschedule Follow-up",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
+      "position": [920, 420]
+    },
+    {
+      "parameters": {
+        "requestMethod": "POST",
+        "url": "https://api.wacrm.net/v1/contacts/tag",
+        "options": {},
+        "headerParametersUi": {
+          "parameter": [
+            { "name": "Authorization", "value": "Bearer ={{$env.WACRM_API_KEY}}" },
+            { "name": "Content-Type", "value": "application/json" }
+          ]
+        },
+        "bodyParametersUi": {
+          "parameter": [
+            { "name": "phone", "value": "={{$json.from_phone}}" },
+            { "name": "tags", "value": "[\"cancelled_visit\", \"survey_feedback\"]" }
+          ]
+        }
+      },
+      "name": "Tag Visit Cancelled",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
+      "position": [920, 540]
+    }
+  ],
+  "connections": {
+    "Inbound Message Webhook (wacrm)": {
+      "main": [
+        [{ "node": "Parse Keyword Router (Rule-Based)", "type": "main", "index": 0 }]
+      ]
+    },
+    "Parse Keyword Router (Rule-Based)": {
+      "main": [
+        [{ "node": "Keyword Switch", "type": "main", "index": 0 }]
+      ]
+    },
+    "Keyword Switch": {
+      "main": [
+        [{ "node": "Reply Price Sheet Link", "type": "main", "index": 0 }],
+        [{ "node": "Tag Lead & Alert Sales Team", "type": "main", "index": 0 }],
+        [{ "node": "Tag for Reschedule Follow-up", "type": "main", "index": 0 }],
+        [{ "node": "Tag Visit Cancelled", "type": "main", "index": 0 }]
+      ]
+    }
+  }
+}

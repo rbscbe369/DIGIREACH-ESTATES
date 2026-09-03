@@ -1,0 +1,87 @@
+{
+  "name": "Digireach Estates - Weekly Unconverted Lead Nurture Sequence",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "weeks",
+              "triggerAtDay": [2],
+              "triggerAtHour": 10,
+              "triggerAtMinute": 30
+            }
+          ]
+        }
+      },
+      "name": "Every Tuesday 10:30 AM Trigger",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1,
+      "position": [220, 300]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "-- Fetch leads with completed visits older than 7 days who have not booked a unit yet\nSELECT \n  v.id, \n  v.name, \n  v.phone, \n  v.project_name, \n  v.project_type,\n  p.construction_progress_pct,\n  p.price_start\nFROM public.site_visits v\nLEFT JOIN public.projects p ON v.project_id = p.id\nWHERE v.status = 'completed'\n  AND v.date <= CURRENT_DATE - INTERVAL '7 days'\nLIMIT 100;"
+      },
+      "name": "Query Unconverted Site Visitors",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 1,
+      "position": [460, 300]
+    },
+    {
+      "parameters": {
+        "functionCode": "// Select rotating weekly nurture content (Milestones, Price Revision Notice, New Phase Announcement)\nconst itemsOut = [];\n\nfor (const item of items) {\n  const row = item.json;\n  const cleanPhone = String(row.phone || '').replace(/\\D/g, '');\n  \n  itemsOut.push({\n    json: {\n      to: '91' + cleanPhone,\n      name: row.name,\n      project: row.project_name,\n      progress: row.construction_progress_pct || 68,\n      price: row.price_start || '₹1.45 Cr',\n      milestone_video_url: 'https://digireachestates.com/progress-videos',\n      template: 'digireach_weekly_nurture_milestone'\n    }\n  });\n}\n\nreturn itemsOut;"
+      },
+      "name": "Format Weekly Nurture Copy",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [680, 300]
+    },
+    {
+      "parameters": {
+        "requestMethod": "POST",
+        "url": "https://api.wacrm.net/v1/messages/template",
+        "options": {},
+        "headerParametersUi": {
+          "parameter": [
+            { "name": "Authorization", "value": "Bearer ={{$env.WACRM_API_KEY}}" },
+            { "name": "Content-Type", "value": "application/json" }
+          ]
+        },
+        "bodyParametersUi": {
+          "parameter": [
+            { "name": "to", "value": "={{$json.to}}" },
+            { "name": "template", "value": "={{$json.template}}" },
+            { "name": "language", "value": "en" },
+            {
+              "name": "components",
+              "value": "={{JSON.stringify([\n  {\n    type: 'body',\n    parameters: [\n      { type: 'text', text: $json.name },\n      { type: 'text', text: $json.project },\n      { type: 'text', text: String($json.progress) + '%' },\n      { type: 'text', text: $json.milestone_video_url }\n    ]\n  }\n])}}"
+            }
+          ]
+        }
+      },
+      "name": "Dispatch Weekly WhatsApp Nurture",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
+      "position": [900, 300]
+    }
+  ],
+  "connections": {
+    "Every Tuesday 10:30 AM Trigger": {
+      "main": [
+        [{ "node": "Query Unconverted Site Visitors", "type": "main", "index": 0 }]
+      ]
+    },
+    "Query Unconverted Site Visitors": {
+      "main": [
+        [{ "node": "Format Weekly Nurture Copy", "type": "main", "index": 0 }]
+      ]
+    },
+    "Format Weekly Nurture Copy": {
+      "main": [
+        [{ "node": "Dispatch Weekly WhatsApp Nurture", "type": "main", "index": 0 }]
+      ]
+    }
+  }
+}
