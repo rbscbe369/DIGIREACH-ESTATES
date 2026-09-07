@@ -284,9 +284,16 @@ export const PortfolioSection: React.FC<PortfolioSectionProps> = ({
                         <MapPin className="w-3.5 h-3.5 text-[#f59e0b]" />
                         <span className="truncate">{project.location}</span>
                       </div>
-                      <h3 className="font-display text-2xl text-white mt-1 uppercase tracking-wide group-hover:text-amber-300 transition-colors">
-                        {project.name}
-                      </h3>
+                      <div className="flex items-center justify-between gap-2 mt-1">
+                        <h3 className="font-display text-2xl text-white uppercase tracking-wide group-hover:text-amber-300 transition-colors">
+                          {project.name}
+                        </h3>
+                      </div>
+                      <div className="mt-1">
+                        <span className="inline-flex items-center text-[10px] font-mono text-emerald-400 bg-emerald-950/40 border border-emerald-500/30 px-2 py-0.5 rounded-sm">
+                          Project RERA: {project.reraNumber}
+                        </span>
+                      </div>
                       <p className="text-xs text-slate-300 font-sans mt-2 line-clamp-2">
                         {project.tagline}
                       </p>
