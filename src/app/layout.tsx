@@ -6,6 +6,9 @@ export const metadata: Metadata = {
   title: `${siteConfig.name} — Luxury Residential & Commercial Real Estate`,
   description: "Architectural precision, timeless residential communities, and Grade-A commercial tech parks across South India. Registered with RERA.",
   keywords: ["Real Estate Builder", "Luxury Apartments", "Villas", "Commercial Spaces", "Tech Park", "Digireach Estates", "RERA Approved"],
+  verification: {
+    google: "googleaf8bee6b6fc97e54",
+  },
 };
 
 export default function RootLayout({
