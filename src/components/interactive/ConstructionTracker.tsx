@@ -102,7 +102,7 @@ export const ConstructionTracker: React.FC<ConstructionTrackerProps> = ({ onBook
             <div className="lg:col-span-7 space-y-5">
               <div>
                 <span className="font-mono text-xs uppercase text-[#f59e0b] tracking-widest font-semibold">
-                  Civil Engineering Log · RERA {currentProject.reraNumber}
+                  Civil Engineering Log · Project RERA: {currentProject.reraNumber}
                 </span>
                 <h3 className="font-display text-3xl text-white uppercase mt-1">
                   {currentProject.name}

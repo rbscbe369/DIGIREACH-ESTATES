@@ -120,7 +120,7 @@ export const ProjectDetailModal: React.FC<ProjectDetailModalProps> = ({
                 </span>
                 <span className="px-2.5 py-0.5 bg-[#05070c]/90 text-emerald-400 border border-emerald-500/40 font-mono text-xs uppercase rounded-sm flex items-center gap-1 shadow-md">
                   <ShieldCheck className="w-3 h-3" />
-                  RERA: {project.reraNumber}
+                  Project RERA: {project.reraNumber}
                 </span>
               </div>
               <h2 className="text-2xl sm:text-4xl font-display uppercase tracking-wide text-white drop-shadow-md">
@@ -387,7 +387,7 @@ export const ProjectDetailModal: React.FC<ProjectDetailModalProps> = ({
         {/* Modal Footer Actions */}
         <div className="p-6 bg-[#05070c] border-t border-white/10 flex flex-wrap items-center justify-between gap-4">
           <div className="font-mono text-xs text-slate-300">
-            <span>RERA Registration ID: </span>
+            <span>Project RERA: </span>
             <strong className="text-amber-300">{project.reraNumber}</strong>
           </div>
           <div className="flex items-center gap-3">

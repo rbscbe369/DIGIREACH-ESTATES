@@ -18,7 +18,7 @@ export const Header: React.FC<HeaderProps> = ({ onOpenBooking }) => {
         <div className="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-2">
           <div className="flex items-center gap-2">
             <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
-            <span>Govt. Approved Builder · <strong className="text-slate-200">RERA: {siteConfig.reraNumber}</strong></span>
+            <span>Govt. Approved Builder · <strong className="text-slate-200">Promoter RERA: {siteConfig.reraNumber}</strong></span>
           </div>
           <div className="flex items-center gap-4">
             <a

@@ -28,7 +28,7 @@ export const Hero: React.FC<HeroProps> = ({ onOpenBooking, onOpenQuiz }) => {
               </span>
               <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-emerald-500/10 border border-emerald-500/40 text-emerald-400 font-mono text-[11px] rounded-full uppercase tracking-wider font-semibold">
                 <ShieldCheck className="w-3.5 h-3.5" />
-                RERA Registered: {siteConfig.reraNumber}
+                Promoter RERA: {siteConfig.reraNumber}
               </span>
             </div>
 

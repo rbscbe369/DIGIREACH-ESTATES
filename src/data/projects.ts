@@ -71,7 +71,7 @@ export const projectsData: Project[] = [
     lifestyleTheme: "Pinnacle Skyline & Sky Lounges",
     amenitiesCount: 85,
     constructionProgressPct: 68,
-    reraNumber: "TN/01/BLDR/2024/0912",
+    reraNumber: "TN/11/Building/0912/2024",
     coverImage: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=85",
     galleryImages: [
       "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=85",
@@ -148,7 +148,7 @@ export const projectsData: Project[] = [
     lifestyleTheme: "Biophilic Luxury & Private Pools",
     amenitiesCount: 65,
     constructionProgressPct: 100,
-    reraNumber: "TN/01/BLDR/2023/0741",
+    reraNumber: "TN/11/Building/0741/2023",
     coverImage: "/images/aurum_enclave_villa.jpg",
     galleryImages: [
       "/images/aurum_enclave_villa.jpg",
@@ -206,7 +206,7 @@ export const projectsData: Project[] = [
     lifestyleTheme: "100+ World-Class Resort Amenities",
     amenitiesCount: 110,
     constructionProgressPct: 25,
-    reraNumber: "TN/29/BLDR/2024/1820",
+    reraNumber: "TN/29/Building/1820/2024",
     coverImage: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=1200&q=85",
     galleryImages: [
       "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=1200&q=85",
@@ -317,7 +317,7 @@ export const projectsData: Project[] = [
     lifestyleTheme: "IGBC Platinum Certified Green Park",
     amenitiesCount: 40,
     constructionProgressPct: 54,
-    reraNumber: "TN/01/BLDR/2024/1108",
+    reraNumber: "TN/11/Building/1108/2024",
     coverImage: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1200&q=85",
     galleryImages: [
       "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1200&q=85",
@@ -371,7 +371,7 @@ export const projectsData: Project[] = [
     lifestyleTheme: "High-Footfall Retail Promenade",
     amenitiesCount: 30,
     constructionProgressPct: 22,
-    reraNumber: "TN/01/BLDR/2024/1390",
+    reraNumber: "TN/11/Building/1390/2024",
     coverImage: "https://images.unsplash.com/photo-1555636222-cae831e670b3?auto=format&fit=crop&w=1200&q=85",
     galleryImages: [
       "https://images.unsplash.com/photo-1555636222-cae831e670b3?auto=format&fit=crop&w=1200&q=85"
