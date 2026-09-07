@@ -1,8 +1,21 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import { Project, FloorPlan } from "@/data/projects";
-import { X, CheckCircle2, FileText, Download, Calendar, MapPin, Building, ShieldCheck, ChevronRight } from "lucide-react";
+import {
+  X,
+  CheckCircle2,
+  FileText,
+  Download,
+  Calendar,
+  MapPin,
+  Building,
+  ShieldCheck,
+  ChevronRight,
+  Calculator,
+} from "lucide-react";
+import { EmiCalculator, parsePriceToNumber } from "@/components/interactive/EmiCalculator";
+import { siteConfig } from "@/config/siteConfig";
 
 interface ProjectDetailModalProps {
   project: Project | null;
@@ -16,11 +29,17 @@ export const ProjectDetailModal: React.FC<ProjectDetailModalProps> = ({
   onBookVisit,
 }) => {
   const [selectedFloorPlanIndex, setSelectedFloorPlanIndex] = useState(0);
-  const [activeTab, setActiveTab] = useState<"floorplans" | "amenities" | "gallery">("floorplans");
+  const [activeTab, setActiveTab] = useState<"floorplans" | "calculator" | "amenities" | "gallery">("floorplans");
+
+  const currentPlan: FloorPlan | undefined = project?.floorPlans[selectedFloorPlanIndex] || project?.floorPlans[0];
+
+  // Pre-fill property value estimate for active floor plan / project
+  const unitPriceEstimate = useMemo(() => {
+    if (!project) return 5000000;
+    return parsePriceToNumber(currentPlan?.priceEstimate, project.priceStartNum);
+  }, [project, currentPlan?.priceEstimate]);
 
   if (!project) return null;
-
-  const currentPlan: FloorPlan | undefined = project.floorPlans[selectedFloorPlanIndex] || project.floorPlans[0];
 
   const handleDownloadBrochure = () => {
     const printContent = `
@@ -50,7 +69,7 @@ export const ProjectDetailModal: React.FC<ProjectDetailModalProps> = ({
             <ul>${project.amenities.map(a => `<li>${a}</li>`).join("")}</ul>
           </div>
           <div class="section">
-            <p>For verified bookings, contact Digireach Estates Desk: +91 98765 43210</p>
+            <p>For verified bookings, contact Digireach Estates Desk: ${siteConfig.displayPhone}</p>
           </div>
         </body>
       </html>
@@ -123,10 +142,10 @@ export const ProjectDetailModal: React.FC<ProjectDetailModalProps> = ({
         </div>
 
         {/* Tab Navigation */}
-        <div className="px-6 border-b border-white/10 flex items-center gap-6 bg-[#05070c] font-mono text-xs uppercase tracking-wider">
+        <div className="px-6 border-b border-white/10 flex items-center gap-6 bg-[#05070c] font-mono text-xs uppercase tracking-wider overflow-x-auto">
           <button
             onClick={() => setActiveTab("floorplans")}
-            className={`py-3.5 border-b-2 transition-colors flex items-center gap-2 ${
+            className={`py-3.5 border-b-2 transition-colors flex items-center gap-2 shrink-0 ${
               activeTab === "floorplans"
                 ? "border-[#f59e0b] text-[#f59e0b] font-bold"
                 : "border-transparent text-slate-400 hover:text-white"
@@ -136,8 +155,19 @@ export const ProjectDetailModal: React.FC<ProjectDetailModalProps> = ({
             <span>Floor Plans & Units ({project.floorPlans.length})</span>
           </button>
           <button
+            onClick={() => setActiveTab("calculator")}
+            className={`py-3.5 border-b-2 transition-colors flex items-center gap-2 shrink-0 ${
+              activeTab === "calculator"
+                ? "border-[#f59e0b] text-[#f59e0b] font-bold"
+                : "border-transparent text-slate-400 hover:text-white"
+            }`}
+          >
+            <Calculator className="w-4 h-4" />
+            <span>EMI Calculator</span>
+          </button>
+          <button
             onClick={() => setActiveTab("amenities")}
-            className={`py-3.5 border-b-2 transition-colors flex items-center gap-2 ${
+            className={`py-3.5 border-b-2 transition-colors flex items-center gap-2 shrink-0 ${
               activeTab === "amenities"
                 ? "border-[#f59e0b] text-[#f59e0b] font-bold"
                 : "border-transparent text-slate-400 hover:text-white"
@@ -148,7 +178,7 @@ export const ProjectDetailModal: React.FC<ProjectDetailModalProps> = ({
           </button>
           <button
             onClick={() => setActiveTab("gallery")}
-            className={`py-3.5 border-b-2 transition-colors flex items-center gap-2 ${
+            className={`py-3.5 border-b-2 transition-colors flex items-center gap-2 shrink-0 ${
               activeTab === "gallery"
                 ? "border-[#f59e0b] text-[#f59e0b] font-bold"
                 : "border-transparent text-slate-400 hover:text-white"
@@ -255,6 +285,58 @@ export const ProjectDetailModal: React.FC<ProjectDetailModalProps> = ({
                   </div>
                 </div>
               )}
+
+              {/* Interactive Unit EMI Calculator (Embedded directly with floor plan & pricing) */}
+              <div className="pt-2">
+                <EmiCalculator
+                  compact={true}
+                  initialPropertyValue={unitPriceEstimate}
+                  projectName={`${project.name} (${currentPlan?.unitType || "Selected Unit"})`}
+                  onOpenBooking={() => {
+                    onClose();
+                    onBookVisit(project.name, project.type, currentPlan?.unitType);
+                  }}
+                />
+              </div>
+            </div>
+          )}
+
+          {/* TAB: Dedicated EMI Calculator */}
+          {activeTab === "calculator" && (
+            <div className="space-y-4">
+              {/* Unit Selector Bar inside Calculator Tab */}
+              <div className="bg-[#05070c] border border-white/10 p-3.5 rounded-sm flex flex-wrap items-center justify-between gap-3 font-mono text-xs">
+                <div className="flex items-center gap-2">
+                  <span className="text-slate-400">Unit Model:</span>
+                  <strong className="text-amber-400">{currentPlan?.unitType || "Standard Unit"}</strong>
+                  <span className="text-slate-500">({currentPlan?.priceEstimate || project.priceStart})</span>
+                </div>
+                <div className="flex flex-wrap gap-1.5">
+                  {project.floorPlans.map((plan, idx) => (
+                    <button
+                      key={plan.unitType}
+                      onClick={() => setSelectedFloorPlanIndex(idx)}
+                      className={`px-3 py-1 text-[11px] uppercase tracking-wider rounded-sm transition-all ${
+                        selectedFloorPlanIndex === idx
+                          ? "bg-[#f59e0b] text-[#05070c] font-bold"
+                          : "bg-[#0a0e18] border border-white/15 text-slate-400 hover:text-white"
+                      }`}
+                    >
+                      {plan.unitType}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <EmiCalculator
+                compact={true}
+                initialPropertyValue={unitPriceEstimate}
+                projectName={`${project.name} (${currentPlan?.unitType || "Selected Unit"})`}
+                onOpenBooking={() => {
+                  onClose();
+                  onBookVisit(project.name, project.type, currentPlan?.unitType);
+                }}
+              />
             </div>
           )}
 
