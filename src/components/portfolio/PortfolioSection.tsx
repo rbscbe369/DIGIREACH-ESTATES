@@ -22,7 +22,7 @@ export const PortfolioSection: React.FC<PortfolioSectionProps> = ({
 
   // Extract unique cities
   const cities = useMemo(() => {
-    return ["all", "Coimbatore", "Chennai", "Bengaluru"];
+    return ["all", "Coimbatore", "Chennai"];
   }, []);
 
   // Filtered project list
@@ -57,7 +57,7 @@ export const PortfolioSection: React.FC<PortfolioSectionProps> = ({
               Signature Landmark Developments
             </h2>
             <p className="text-slate-300 font-sans text-base mt-2 max-w-xl">
-              Explore ongoing high-rises, gated villa communities, and Grade-A commercial tech parks across Coimbatore, Chennai, and Bengaluru.
+              Explore ongoing high-rises, gated villa communities, and Grade-A commercial tech parks across Coimbatore and Chennai.
             </p>
           </div>
 

@@ -90,7 +90,7 @@ export const Footer: React.FC<FooterProps> = ({ onOpenBooking }) => {
 
             <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-mono rounded-sm">
               <ShieldCheck className="w-4 h-4" />
-              <span>RERA Reg: {siteConfig.reraNumber}</span>
+              <span>Promoter RERA: {siteConfig.reraNumber}</span>
             </div>
           </div>
 

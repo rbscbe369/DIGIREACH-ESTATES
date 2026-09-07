@@ -24,7 +24,7 @@ export interface Project {
   subType: string;
   tagline: string;
   location: string;
-  city: string; // "Coimbatore" | "Chennai" | "Bengaluru"
+  city: string; // "Coimbatore" | "Chennai"
   priceStart: string;
   priceStartNum: number; // in INR Lakhs
   possessionDate: string;
@@ -71,7 +71,7 @@ export const projectsData: Project[] = [
     lifestyleTheme: "Pinnacle Skyline & Sky Lounges",
     amenitiesCount: 85,
     constructionProgressPct: 68,
-    reraNumber: "TN/11/Building/0912/2024",
+    reraNumber: "TN/Coimbatore/Building/0912/2024",
     coverImage: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=85",
     galleryImages: [
       "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=85",
@@ -148,7 +148,7 @@ export const projectsData: Project[] = [
     lifestyleTheme: "Biophilic Luxury & Private Pools",
     amenitiesCount: 65,
     constructionProgressPct: 100,
-    reraNumber: "TN/11/Building/0741/2023",
+    reraNumber: "TN/Coimbatore/Building/0741/2023",
     coverImage: "/images/aurum_enclave_villa.jpg",
     galleryImages: [
       "/images/aurum_enclave_villa.jpg",
@@ -206,7 +206,7 @@ export const projectsData: Project[] = [
     lifestyleTheme: "100+ World-Class Resort Amenities",
     amenitiesCount: 110,
     constructionProgressPct: 25,
-    reraNumber: "TN/29/Building/1820/2024",
+    reraNumber: "TN/Chennai/Building/1820/2024",
     coverImage: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=1200&q=85",
     galleryImages: [
       "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=1200&q=85",
@@ -247,12 +247,12 @@ export const projectsData: Project[] = [
   {
     id: "proj-4",
     name: "Digireach Silicon Heights",
-    slug: "digireach-silicon-heights-bengaluru",
+    slug: "digireach-silicon-heights-chennai",
     type: "residential",
-    subType: "Kids & Sports-Themed Township",
-    tagline: "20-acre integrated sports and wellness township right next to ITPL.",
-    location: "ITPB Main Road, Whitefield, Bengaluru",
-    city: "Bengaluru",
+    subType: "Kids & Sports-Themed Community",
+    tagline: "20-acre integrated sports and wellness community in Chennai's OMR IT corridor.",
+    location: "OMR IT Expressway, Navalur - Siruseri SIPCOT, Chennai",
+    city: "Chennai",
     priceStart: "₹1.60 Cr",
     priceStartNum: 160,
     possessionDate: "January 2027",
@@ -262,20 +262,20 @@ export const projectsData: Project[] = [
     lifestyleTheme: "Kids & Sports Themed Community",
     amenitiesCount: 105,
     constructionProgressPct: 58,
-    reraNumber: "PRM/KA/RERA/1251/2024/0488",
+    reraNumber: "TN/Chennai/Building/0655/2025",
     coverImage: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=1200&q=85",
     galleryImages: [
       "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=1200&q=85",
       "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1200&q=85"
     ],
-    description: "Designed for modern IT leaders and growing families in Bengaluru's tech heartland. Features a full-size football turf, indoor badminton academy, zero-vehicle pedestrian podium, and CBSE school feeder shuttle.",
+    description: "Designed for modern tech leaders and growing families along Chennai's prime OMR IT corridor. Features an Olympic-grade football turf, indoor badminton academy, zero-vehicle pedestrian podium, and CBSE school feeder shuttle.",
     unitTypes: ["2 BHK Smart", "3 BHK Family Suite", "4 BHK Duplex"],
     amenities: [
       "Professional Football Turf & Cricket Nets",
       "Kids Discovery Science Park & Creche",
       "Zero Dead-Space Architectural Efficiency",
       "Zero Vehicle Movement on Surface Podium",
-      "Metro Station Connected Skywalk"
+      "Metro Station Connected Feeder Shuttle"
     ],
     floorPlans: [
       {
@@ -292,11 +292,11 @@ export const projectsData: Project[] = [
       { stage: "RCC Superstructure (Tier 14 of 24)", pct: 60, completed: false },
       { stage: "Brick Masonry & Electrical Piping", pct: 35, completed: false }
     ],
-    coordinates: { lat: 12.9863, lng: 77.7335 },
+    coordinates: { lat: 12.8398, lng: 80.2223 },
     nearbyLandmarks: [
-      { name: "ITPB International Tech Park", distance: "1.2 km (4 mins)" },
-      { name: "Kadugodi Metro Station", distance: "900 meters" },
-      { name: "Manipal Hospital Whitefield", distance: "2.8 km" }
+      { name: "Siruseri SIPCOT IT Park", distance: "1.2 km (4 mins)" },
+      { name: "OMR Metro Phase II Station", distance: "800 meters" },
+      { name: "Chettinad Health City Multispecialty", distance: "2.5 km" }
     ]
   },
   {
@@ -317,7 +317,7 @@ export const projectsData: Project[] = [
     lifestyleTheme: "IGBC Platinum Certified Green Park",
     amenitiesCount: 40,
     constructionProgressPct: 54,
-    reraNumber: "TN/11/Building/1108/2024",
+    reraNumber: "TN/Coimbatore/Building/1108/2024",
     coverImage: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1200&q=85",
     galleryImages: [
       "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1200&q=85",
@@ -371,7 +371,7 @@ export const projectsData: Project[] = [
     lifestyleTheme: "High-Footfall Retail Promenade",
     amenitiesCount: 30,
     constructionProgressPct: 22,
-    reraNumber: "TN/11/Building/1390/2024",
+    reraNumber: "TN/Coimbatore/Building/1390/2024",
     coverImage: "https://images.unsplash.com/photo-1555636222-cae831e670b3?auto=format&fit=crop&w=1200&q=85",
     galleryImages: [
       "https://images.unsplash.com/photo-1555636222-cae831e670b3?auto=format&fit=crop&w=1200&q=85"

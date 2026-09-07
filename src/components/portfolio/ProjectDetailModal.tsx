@@ -55,7 +55,7 @@ export const ProjectDetailModal: React.FC<ProjectDetailModalProps> = ({
           </style>
         </head>
         <body>
-          <span class="badge">RERA: ${project.reraNumber}</span>
+          <span class="badge">Project RERA: ${project.reraNumber}</span>
           <h1>${project.name}</h1>
           <p><strong>Location:</strong> ${project.location}</p>
           <p><strong>Status:</strong> ${project.statusLabel} · Possession: ${project.possessionDate}</p>
